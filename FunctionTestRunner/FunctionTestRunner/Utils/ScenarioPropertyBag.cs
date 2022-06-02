@@ -47,11 +47,6 @@ public class ScenarioPropertyBag
         return missingKeys.Count == 0;
     }
 
-    public bool ContainsKeys(params DataBagKey[] keys)
-    {
-        return ContainsKeys(keys.Select(x => x.ToString()).ToArray());
-    }
-
     public T Get<T>(string key)
     {
         if (!_bag.ContainsKey(key) || !_bag[key].Item1)
