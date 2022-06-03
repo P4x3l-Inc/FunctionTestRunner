@@ -1,6 +1,6 @@
-import { ScenarioPropertyBag } from "./scenario-property-bag";
+import ScenarioPropertyBag from "./scenario-property-bag";
 
-export class TestRunner {
+export default class TestRunner {
     static run(testMethod: (bag: ScenarioPropertyBag) => void) {
         var bag = ScenarioPropertyBag.create();
         try {

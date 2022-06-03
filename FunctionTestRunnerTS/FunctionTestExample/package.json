@@ -1,19 +1,18 @@
 {
-  "name": "functiontestrunner",
+  "name": "functiontestexample",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "axios": "^0.27.2",
-    "config": "^3.3.7"
-  },
   "devDependencies": {
-    "@types/config": "^0.0.41"
+    "cypress": "^10.0.2"
+  },
+  "dependencies": {
+    "functiontestrunner": "file:../FunctionTestRunner",
+    "typescript": "^4.7.2"
   }
 }

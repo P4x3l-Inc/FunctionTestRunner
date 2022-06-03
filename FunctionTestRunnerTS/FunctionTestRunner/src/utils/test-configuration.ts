@@ -1,35 +1,42 @@
 import config from 'config';
 
-export class TestConfiguration {
+export default class TestConfiguration {
     static getEnvironment(): string {
-        return this.getSetting("environmentToTest");
+        return this.getSetting('testSetup.environment');
     }
 
     static getApiKey(): string {
-        return this.getSetting("apiKey");
+        return this.getSetting('apiKey');
     }
 
-    static getApiBaseUrl(): string
-    {
-        return this.getSetting("apiBaseUrl");
+    static getApiBaseUrl(): string {
+        return this.getSetting('apiBaseUrl');
     }
 
-    // Add more internalAPi info
+    static getApiTimeout(): number {
+        return this.getNumberSetting('apiTimeout');
+    }
 
     static getInternalClientBaseUrl(): string
     {
-        return this.getSetting("internalApiBaseUrl");
+        return this.getSetting('internalApiBaseUrl');
     }
 
     private static getSetting(settingKey: string): string
     {
-        var value: string = config.get(settingKey);
-
-        if (value == null)
-        {
-            throw new Error("AppSetting testEnvironment not defined");
+        if (!config.has(settingKey)) {
+            throw new Error(`AppSetting ${settingKey} not defined`);
         }
 
+        const value: string = config.get(settingKey);
+
         return value;
+    }
+
+    private static getNumberSetting(settingKey: string): number
+    {
+        var value = this.getSetting(settingKey);
+
+        return Number.parseInt(value);
     }
 }

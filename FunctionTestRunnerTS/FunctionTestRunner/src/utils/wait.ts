@@ -1,4 +1,4 @@
-export class Wait {
+export default class Wait {
     static async forMilliseconds(milliseconds: number)
     {
         await this.waitInternal(milliseconds);
