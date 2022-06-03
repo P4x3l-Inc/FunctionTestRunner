@@ -1,4 +1,4 @@
-import { ScenarioPropertyBag } from "../utils/scenario-property-bag";
+import ScenarioPropertyBag from "../utils/scenario-property-bag";
 
 export interface Scenario {
     scenarioType(): string;

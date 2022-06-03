@@ -1,10 +1,10 @@
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import TestConfiguration from '../../utils/test-configuration';
 import Wait from '../../utils/wait';
 
 export default abstract class ApiBase {
     abstract ignoreApiStatusCodes: boolean;
-    axiosClient: AxiosInstance | undefined;
+    axiosClient: AxiosInstance;
 
     constructor() {
         const axiosConfig = {
@@ -17,30 +17,42 @@ export default abstract class ApiBase {
 
     async get<T>(path: string): Promise<T>
     {
-        var response = await execute(HttpMethod.Get, path, );
-        var result = DeserializeResponse<T>(response);
-        return result;
+        const request: AxiosRequestConfig = {
+            method: HttpMethod.Get,
+            url: path,
+        }
+
+        var data = await this.execute<T>(request, 200);
+
+        return data;
     }
 
-    private async execute(method: HttpMethod, url: string, expectedResponse: number) {
-        let response = await axios({
-            method,
-            url,
-        });
+    async PostWithBody<T>(path: string, body: unknown, expectedResponse: number = 200): Promise<T>
+    {
+        const request: AxiosRequestConfig = {
+            method: HttpMethod.Post,
+            url: path,
+            data: body
+        }
+
+        var data = await this.execute<T>(request, expectedResponse);
+
+        return data;
+    }
+
+    private async execute<T>(request: AxiosRequestConfig, expectedResponse: number): Promise<T> {
+        let response = await this.axiosClient(request);
 
         if (!this.ignoreApiStatusCodes) {
             if (response.status !== expectedResponse) {
                 Wait.forSeconds(15);
-                response = await axios({
-                    method,
-                    url,
-                });
+                response = await this.axiosClient(request);
             }
             // Validate response
             // expect(response.status).to.be(expectedResponse);
         }
 
-        return response;
+        return response.data as T;
     }
 }
 
