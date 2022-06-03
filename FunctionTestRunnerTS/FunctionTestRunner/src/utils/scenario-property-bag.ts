@@ -1,4 +1,4 @@
-export class ScenarioPropertyBag {
+export default class ScenarioPropertyBag {
     private bag: { [id: string] : [boolean, string]; };
 
     static create(): ScenarioPropertyBag {
