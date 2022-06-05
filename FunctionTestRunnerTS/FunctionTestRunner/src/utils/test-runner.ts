@@ -1,34 +1,28 @@
-import ScenarioPropertyBag from "./scenario-property-bag";
+import ScenarioPropertyBag from './scenario-property-bag';
 
 export default class TestRunner {
-    static run(testMethod: (bag: ScenarioPropertyBag) => void) {
-        var bag = ScenarioPropertyBag.create();
-        try {
-            this.outputTestProperties();
-            testMethod(bag);
-        }
-        finally
-        {
-            this.cleanUpBag(bag);
-        }
+  static run(testMethod: (bag: ScenarioPropertyBag) => void) {
+    const bag = ScenarioPropertyBag.create();
+    try {
+      this.outputTestProperties();
+      testMethod(bag);
+    } finally {
+      this.cleanUpBag(bag);
     }
+  }
 
-    static async runAsync(testMethod: (bag: ScenarioPropertyBag) => Promise<void>)
-    {
-        var bag = ScenarioPropertyBag.create();
-        try
-        {
-            this.outputTestProperties();
-            await testMethod(bag);
-        }
-        finally
-        {
-            this.cleanUpBag(bag);
-        }
+  static async runAsync(testMethod: (bag: ScenarioPropertyBag) => Promise<void>) {
+    const bag = ScenarioPropertyBag.create();
+    try {
+      this.outputTestProperties();
+      await testMethod(bag);
+    } finally {
+      this.cleanUpBag(bag);
     }
+  }
 
-    private static cleanUpBag(bag: ScenarioPropertyBag) {
-        /* RestBase.IgnoreApiStatusCodes = true;
+  private static cleanUpBag(bag: ScenarioPropertyBag) {
+    /* RestBase.IgnoreApiStatusCodes = true;
 
         AchievementScenarios.DeleteAllAchievements();
         SqlTestActivityScenarios.ClearTest(bag);
@@ -55,10 +49,10 @@ export default class TestRunner {
         SegmentationScenarios.DeleteSegmentations(bag);
         SegmentationScenarios.DeleteTargetAudience(bag);
         SegmentationScenarios.DeleteTags(bag);*/
-    }
+  }
 
-    private static outputTestProperties() {
-        /*TestContext.WriteLine("Test Configuration:");
+  private static outputTestProperties() {
+    /*TestContext.WriteLine("Test Configuration:");
         TestContext.WriteLine($"Environment: {TestConfiguration.GetEnvironment()}");
         TestContext.WriteLine($"Api base url: {TestConfiguration.GetApiBaseUrl()}");
         TestContext.WriteLine($"Internal api base url: {TestConfiguration.GetInternalClientBaseUrl()}");
@@ -79,5 +73,5 @@ export default class TestRunner {
             ? string.Join(", ", testCategories)
             : string.Empty;
         TestContext.WriteLine($"Categories: {categoriesString}");*/
-    }
+  }
 }

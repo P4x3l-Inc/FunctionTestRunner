@@ -22,12 +22,12 @@ class Wait {
     }
     static forMinutes(minutes) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.waitInternal((minutes * 60) * 1000);
+            yield this.waitInternal(minutes * 60 * 1000);
         });
     }
     static waitInternal(milliseconds) {
         return __awaiter(this, void 0, void 0, function* () {
-            return new Promise(resolve => setTimeout(resolve, milliseconds));
+            return new Promise((resolve) => setTimeout(resolve, milliseconds));
         });
     }
 }

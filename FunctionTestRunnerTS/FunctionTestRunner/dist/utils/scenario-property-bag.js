@@ -9,7 +9,7 @@ class ScenarioPropertyBag {
     }
     require(keys) {
         const missingKeys = [];
-        keys.forEach(key => {
+        keys.forEach((key) => {
             if (!(key in this.bag)) {
                 missingKeys.push(key);
             }
@@ -19,13 +19,13 @@ class ScenarioPropertyBag {
         }
     }
     containsKeys(keys) {
-        var missingKeys = [];
-        keys.forEach(key => {
+        const missingKeys = [];
+        keys.forEach((key) => {
             if (!(key in this.bag)) {
                 missingKeys.push(key);
             }
         });
-        return missingKeys.length == 0;
+        return missingKeys.length === 0;
     }
     get(key) {
         if (!(key in this.bag) || !this.bag[key][0]) {

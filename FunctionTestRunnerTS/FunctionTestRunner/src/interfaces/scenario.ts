@@ -1,7 +1,7 @@
-import ScenarioPropertyBag from "../utils/scenario-property-bag";
+import ScenarioPropertyBag from '../utils/scenario-property-bag';
 
 export interface Scenario {
-    scenarioType(): string;
-    setupScenarios(bag: ScenarioPropertyBag): string;
-    cleanupScenarios(bag: ScenarioPropertyBag): void;
+  scenarioType(): string;
+  setupScenarios(bag: ScenarioPropertyBag): string;
+  cleanupScenarios(bag: ScenarioPropertyBag): void;
 }

@@ -1,9 +1,4 @@
-import * as interfaces from './interfaces/index';
-import * as utils from './utils/index';
-import * as wrappers from './wrappers/index';
+export * from './interfaces/index';
+export * from './utils/index';
+export *  from './wrappers/index';
 
-export {
-    interfaces,
-    utils,
-    wrappers,
-}

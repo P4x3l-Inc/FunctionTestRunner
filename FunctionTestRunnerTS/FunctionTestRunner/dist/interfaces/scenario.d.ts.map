@@ -1,0 +1,1 @@
+{"version":3,"file":"scenario.d.ts","sourceRoot":"","sources":["../../src/interfaces/scenario.ts"],"names":[],"mappings":"AAAA,OAAO,mBAAmB,MAAM,gCAAgC,CAAC;AAEjE,MAAM,WAAW,QAAQ;IACvB,YAAY,IAAI,MAAM,CAAC;IACvB,cAAc,CAAC,GAAG,EAAE,mBAAmB,GAAG,MAAM,CAAC;IACjD,gBAAgB,CAAC,GAAG,EAAE,mBAAmB,GAAG,IAAI,CAAC;CAClD"}

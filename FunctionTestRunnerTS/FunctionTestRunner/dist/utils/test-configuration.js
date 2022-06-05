@@ -28,8 +28,8 @@ class TestConfiguration {
         return value;
     }
     static getNumberSetting(settingKey) {
-        var value = this.getSetting(settingKey);
-        return Number.parseInt(value);
+        const value = this.getSetting(settingKey);
+        return Number.parseInt(value, 10);
     }
 }
 exports.default = TestConfiguration;

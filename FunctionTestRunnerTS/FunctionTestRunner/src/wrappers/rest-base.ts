@@ -1,5 +1,3 @@
-import axios from 'axios'
+import axios from 'axios';
 
-export default abstract class RestBase {
-    
-}
+export default abstract class RestBase {}

@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const scenario_property_bag_1 = __importDefault(require("./scenario-property-bag"));
 class TestRunner {
     static run(testMethod) {
-        var bag = scenario_property_bag_1.default.create();
+        const bag = scenario_property_bag_1.default.create();
         try {
             this.outputTestProperties();
             testMethod(bag);
@@ -26,7 +26,7 @@ class TestRunner {
     }
     static runAsync(testMethod) {
         return __awaiter(this, void 0, void 0, function* () {
-            var bag = scenario_property_bag_1.default.create();
+            const bag = scenario_property_bag_1.default.create();
             try {
                 this.outputTestProperties();
                 yield testMethod(bag);
@@ -38,55 +38,55 @@ class TestRunner {
     }
     static cleanUpBag(bag) {
         /* RestBase.IgnoreApiStatusCodes = true;
-
-        AchievementScenarios.DeleteAllAchievements();
-        SqlTestActivityScenarios.ClearTest(bag);
-        AutomationsScenarios.RemoveAutomation(bag);
-        TransactionsScenarios.RemoveTransactionData(bag);
-        CustomTriggersScenarios.RemoveCustomTrigger(bag);
-        EmailScenarios.DeleteEmailTemplate(bag);
-        EmailScenarios.DeleteEmail(bag);
-        LabelScenarios.RemoveGeneratedLabels(bag);
-        ScheduledJobsScenarios.RemoveScheduledJob(bag);
-        StoreScenarios.RemoveStores();
-        PromotionScenarios.RemovePromotions(bag);
-        ContactsScenarios.RemoveContactConsents(bag);
-        ContactsScenarios.RemoveGeneratedContacts(bag);
-        ContactExportScenarios.RemovedGeneratedContactExport(bag);
-        BonusCheckScenarios.RemoveGeneratedBonusChecks(bag);
-        ApplicationUserScenarios.DeleteUser(bag);
-        BonusScenarios.RemoveGeneratedBonusTransactions(bag);
-        PointCardScenarios.DeletePointCards(bag);
-        RoomReservationsScenarios.RemoveRoomReservations(bag);
-        ProductRecommendationsScenarios.RemoveAllProductRecommendations();
-        BiExportScenarios.ClearFtpFiles(bag);
-        ContactAttributeScenarios.DeleteContactAttributes(bag);
-        SegmentationScenarios.DeleteSegmentations(bag);
-        SegmentationScenarios.DeleteTargetAudience(bag);
-        SegmentationScenarios.DeleteTags(bag);*/
+    
+            AchievementScenarios.DeleteAllAchievements();
+            SqlTestActivityScenarios.ClearTest(bag);
+            AutomationsScenarios.RemoveAutomation(bag);
+            TransactionsScenarios.RemoveTransactionData(bag);
+            CustomTriggersScenarios.RemoveCustomTrigger(bag);
+            EmailScenarios.DeleteEmailTemplate(bag);
+            EmailScenarios.DeleteEmail(bag);
+            LabelScenarios.RemoveGeneratedLabels(bag);
+            ScheduledJobsScenarios.RemoveScheduledJob(bag);
+            StoreScenarios.RemoveStores();
+            PromotionScenarios.RemovePromotions(bag);
+            ContactsScenarios.RemoveContactConsents(bag);
+            ContactsScenarios.RemoveGeneratedContacts(bag);
+            ContactExportScenarios.RemovedGeneratedContactExport(bag);
+            BonusCheckScenarios.RemoveGeneratedBonusChecks(bag);
+            ApplicationUserScenarios.DeleteUser(bag);
+            BonusScenarios.RemoveGeneratedBonusTransactions(bag);
+            PointCardScenarios.DeletePointCards(bag);
+            RoomReservationsScenarios.RemoveRoomReservations(bag);
+            ProductRecommendationsScenarios.RemoveAllProductRecommendations();
+            BiExportScenarios.ClearFtpFiles(bag);
+            ContactAttributeScenarios.DeleteContactAttributes(bag);
+            SegmentationScenarios.DeleteSegmentations(bag);
+            SegmentationScenarios.DeleteTargetAudience(bag);
+            SegmentationScenarios.DeleteTags(bag);*/
     }
     static outputTestProperties() {
         /*TestContext.WriteLine("Test Configuration:");
-        TestContext.WriteLine($"Environment: {TestConfiguration.GetEnvironment()}");
-        TestContext.WriteLine($"Api base url: {TestConfiguration.GetApiBaseUrl()}");
-        TestContext.WriteLine($"Internal api base url: {TestConfiguration.GetInternalClientBaseUrl()}");
-        TestContext.WriteLine($"Tenant api base url: {TestConfiguration.GetTenantsClientBaseUrl()}");
-
-        var stackTrace = new StackTrace();
-        var callingClassType = stackTrace.GetFrame(2).GetMethod().DeclaringType;
-
-        var testCategories = new List<string>();
-        var classCategories = callingClassType?.GetCustomAttributes(typeof(TeamAttribute), false)
-            .Select(x => (x as TeamAttribute)?.Name).Where(x => !string.IsNullOrEmpty(x));
-        testCategories.AddRange(classCategories);
-
-        var methodCategories = TestContext.CurrentContext.Test.Properties["Category"];
-        testCategories.AddRange(methodCategories.Cast<string>());
-
-        var categoriesString = testCategories.Count > 0
-            ? string.Join(", ", testCategories)
-            : string.Empty;
-        TestContext.WriteLine($"Categories: {categoriesString}");*/
+            TestContext.WriteLine($"Environment: {TestConfiguration.GetEnvironment()}");
+            TestContext.WriteLine($"Api base url: {TestConfiguration.GetApiBaseUrl()}");
+            TestContext.WriteLine($"Internal api base url: {TestConfiguration.GetInternalClientBaseUrl()}");
+            TestContext.WriteLine($"Tenant api base url: {TestConfiguration.GetTenantsClientBaseUrl()}");
+    
+            var stackTrace = new StackTrace();
+            var callingClassType = stackTrace.GetFrame(2).GetMethod().DeclaringType;
+    
+            var testCategories = new List<string>();
+            var classCategories = callingClassType?.GetCustomAttributes(typeof(TeamAttribute), false)
+                .Select(x => (x as TeamAttribute)?.Name).Where(x => !string.IsNullOrEmpty(x));
+            testCategories.AddRange(classCategories);
+    
+            var methodCategories = TestContext.CurrentContext.Test.Properties["Category"];
+            testCategories.AddRange(methodCategories.Cast<string>());
+    
+            var categoriesString = testCategories.Count > 0
+                ? string.Join(", ", testCategories)
+                : string.Empty;
+            TestContext.WriteLine($"Categories: {categoriesString}");*/
     }
 }
 exports.default = TestRunner;

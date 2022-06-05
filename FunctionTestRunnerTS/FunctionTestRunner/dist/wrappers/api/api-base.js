@@ -29,7 +29,7 @@ class ApiBase {
                 method: HttpMethod.Get,
                 url: path,
             };
-            var data = yield this.execute(request, 200);
+            const data = yield this.execute(request, 200);
             return data;
         });
     }
@@ -38,9 +38,9 @@ class ApiBase {
             const request = {
                 method: HttpMethod.Post,
                 url: path,
-                data: body
+                data: body,
             };
-            var data = yield this.execute(request, expectedResponse);
+            const data = yield this.execute(request, expectedResponse);
             return data;
         });
     }
