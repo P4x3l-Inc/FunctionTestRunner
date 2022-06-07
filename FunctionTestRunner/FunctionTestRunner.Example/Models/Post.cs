@@ -2,16 +2,14 @@
 
 public class Post
 {
-    public Post(string id, string title, string body, bool hasBeenSent)
+    public Post(string title, string body)
     {
-        this.id = id;
-        this.title = title;
-        this.body = body;
-        this.hasBeenSent = hasBeenSent;
+        Title = title;
+        Body = body;
     }
 
-    public string id { get; set; }
-    public string title { get; set; }
-    public string body { get; set; }
-    public bool hasBeenSent { get; set; }
+    public string? Id { get; set; }
+    public string Title { get; set; }
+    public string Body { get; set; }
+    public bool? HasBeenSent { get; set; }
 }

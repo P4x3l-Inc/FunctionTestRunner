@@ -53,6 +53,25 @@ public abstract class RestBase
         var result = DeserializeResponse<T>(response);
         return result;
     }
+
+    protected async Task<T> PutWithBody<T>(string path, object body)
+    {
+        var request = new RestRequest(path, Method.Put);
+        request.RequestFormat = DataFormat.Json;
+
+        request.AddJsonBody(body);
+
+        var response = await Execute(request);
+        var result = DeserializeResponse<T>(response);
+        return result;
+    }
+
+    protected async Task Delete(string path, HttpStatusCode expectedResponse = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Delete);
+
+        await Execute(request, expectedResponse);
+    }
     /*
     protected T GetWithUrlSegment<T>(string path, Dictionary<string, object> segments,
         HttpStatusCode expectedResponse = HttpStatusCode.OK, bool ignoreResponse = false)
@@ -316,15 +335,7 @@ public abstract class RestBase
         return result;
     }
 
-    protected void PutWithBody(string path, object body)
-    {
-        var request = new RestRequest(path, Method.PUT);
-        request.RequestFormat = DataFormat.Json;
-
-        request.AddJsonBody(body);
-
-        Execute(request);
-    }
+    
 
     protected T PostWithUrlSegmentAndQuery<T>(string path, Dictionary<string, object> segments, Dictionary<string, object> query)
     {
@@ -419,9 +430,6 @@ public abstract class RestBase
 
     private async Task<RestResponse> Execute(RestRequest request, HttpStatusCode expectedResponse = HttpStatusCode.OK)
     {
-        var TEST_TOKEN = "agYoOwwVfa1-FjSylIOJHIrz89CGsBnM59bnRQGrWdZDKIt59dXUqJ3eyseiiLApag2bqGQpYgHBfwZh4uy5iGnJ5-kf3zl6r6m-at5EGZVlvyH60";
-        request.AddParameter("voyadoFunctionTestToken", TEST_TOKEN, ParameterType.HttpHeader);
-
         var response = await RestClient.ExecuteAsync(request);
         if (!IgnoreApiStatusCodes)
         {

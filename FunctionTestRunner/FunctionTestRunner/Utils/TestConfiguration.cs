@@ -29,11 +29,12 @@ public static class TestConfiguration
 
     private static string GetAppSetting(string appSetting)
     {
+        
         var value = ConfigurationManager.AppSettings[appSetting];
 
         if (value == null)
         {
-            throw new AppSettingNotDefinedException("AppSetting testEnvironment not defined");
+            throw new AppSettingNotDefinedException($"AppSetting {appSetting} not defined");
         }
 
         return value;
