@@ -9,10 +9,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^10.0.2"
+    "cypress": "^10.0.2",
+    "config": "^3.3.7"
   },
   "dependencies": {
-    "functiontestrunner": "0.1.1",
+    "functiontestrunner": "file:../FunctionTestRunner",
     "typescript": "^4.7.2"
   }
 }

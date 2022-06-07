@@ -33,10 +33,30 @@ class ApiBase {
             return data;
         });
     }
-    PostWithBody(path, body, expectedResponse = 200) {
+    delete(path) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const request = {
+                method: HttpMethod.Delete,
+                url: path,
+            };
+            const data = yield this.execute(request, 200);
+        });
+    }
+    postWithBody(path, body, expectedResponse = 200) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = {
                 method: HttpMethod.Post,
+                url: path,
+                data: body,
+            };
+            const data = yield this.execute(request, expectedResponse);
+            return data;
+        });
+    }
+    putWithBody(path, body, expectedResponse = 200) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const request = {
+                method: HttpMethod.Put,
                 url: path,
                 data: body,
             };
@@ -65,6 +85,6 @@ var HttpMethod;
     HttpMethod["Get"] = "get";
     HttpMethod["Post"] = "post";
     HttpMethod["Delete"] = "delete";
-    HttpMethod["Update"] = "update";
+    HttpMethod["Put"] = "put";
 })(HttpMethod || (HttpMethod = {}));
 //# sourceMappingURL=api-base.js.map

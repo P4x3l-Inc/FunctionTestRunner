@@ -1,0 +1,13 @@
+{
+    "api": {
+      "apiKey": "ea710b68-46c4-400e-9036-fa72c8db7a39",
+      "baseUrl": "http://localhost:6060/",
+      "timeout": "30000"
+    },
+    "internalApi": {
+        "baseUrl": ""
+    },
+    "testSetup": {
+        "environment": "local"
+    }
+  }

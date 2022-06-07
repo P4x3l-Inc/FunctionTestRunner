@@ -26,9 +26,30 @@ export default abstract class ApiBase {
     return data;
   }
 
-  async PostWithBody<T>(path: string, body: unknown, expectedResponse: number = 200): Promise<T> {
+  async delete<T>(path: string): Promise<void> {
+    const request: AxiosRequestConfig = {
+      method: HttpMethod.Delete,
+      url: path,
+    };
+
+    const data = await this.execute<T>(request, 200);
+  }
+
+  async postWithBody<T>(path: string, body: unknown, expectedResponse: number = 200): Promise<T> {
     const request: AxiosRequestConfig = {
       method: HttpMethod.Post,
+      url: path,
+      data: body,
+    };
+
+    const data = await this.execute<T>(request, expectedResponse);
+
+    return data;
+  }
+
+  async putWithBody<T>(path: string, body: unknown, expectedResponse: number = 200): Promise<T> {
+    const request: AxiosRequestConfig = {
+      method: HttpMethod.Put,
       url: path,
       data: body,
     };
@@ -58,5 +79,5 @@ enum HttpMethod {
   Get = 'get',
   Post = 'post',
   Delete = 'delete',
-  Update = 'update',
+  Put = 'put',
 }
