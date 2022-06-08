@@ -9,17 +9,29 @@ namespace FunctionTestRunner.Wrappers;
 public abstract class RestBase
 {
     protected abstract RestClient RestClient { get; }
+    protected abstract ITestConfiguration Config { get; }
 
     /// <summary>
     /// Dont fail test, even if api-call fails.
     /// </summary>
     public static bool IgnoreApiStatusCodes { get; set; }
 
-    protected async Task<T> Get<T>(string path)
+    protected async Task<T> Get<T>(string path, HttpStatusCode httpStatus = HttpStatusCode.OK)
     {
         var request = new RestRequest(path, Method.Get);
 
-        var response = await Execute(request);
+        var response = await Execute(request, httpStatus).ConfigureAwait(false);
+        var result = DeserializeResponse<T>(response);
+        return result;
+    }
+
+    protected async Task<T> Post<T>(string path, HttpStatusCode expectedResponse = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Post);
+        request.RequestFormat = DataFormat.Json;
+
+        var response = await Execute(request, expectedResponse).ConfigureAwait(false);
+
         var result = DeserializeResponse<T>(response);
         return result;
     }
@@ -36,7 +48,7 @@ public abstract class RestBase
 
         request.AddJsonBody(body);
 
-        var response = await Execute(request, expectedResponse);
+        var response = await Execute(request, expectedResponse).ConfigureAwait(false);
 
         var result = DeserializeResponse<T>(response);
         return result;
@@ -48,7 +60,7 @@ public abstract class RestBase
         request.RequestFormat = DataFormat.Json;
         request.AddJsonBody(body ?? string.Empty);
 
-        var response = await Execute(request, expectedResponse);
+        var response = await Execute(request, expectedResponse).ConfigureAwait(false);
 
         var result = DeserializeResponse<T>(response);
         return result;
@@ -61,7 +73,7 @@ public abstract class RestBase
 
         request.AddJsonBody(body);
 
-        var response = await Execute(request);
+        var response = await Execute(request).ConfigureAwait(false);
         var result = DeserializeResponse<T>(response);
         return result;
     }
@@ -70,7 +82,7 @@ public abstract class RestBase
     {
         var request = new RestRequest(path, Method.Delete);
 
-        await Execute(request, expectedResponse);
+        await Execute(request, expectedResponse).ConfigureAwait(false);
     }
     /*
     protected T GetWithUrlSegment<T>(string path, Dictionary<string, object> segments,
@@ -430,7 +442,7 @@ public abstract class RestBase
 
     private async Task<RestResponse> Execute(RestRequest request, HttpStatusCode expectedResponse = HttpStatusCode.OK)
     {
-        var response = await RestClient.ExecuteAsync(request);
+        var response = await RestClient.ExecuteAsync(request).ConfigureAwait(false);
         if (!IgnoreApiStatusCodes)
         {
             if (response.ResponseStatus == ResponseStatus.Error)
@@ -440,7 +452,7 @@ public abstract class RestBase
                 // so lets wait a few seconds and try again
                 // TestContext.WriteLine("Received reponse status error, making one more attempt...");
                 Wait.ForSeconds(15);
-                response = await RestClient.ExecuteAsync(request);
+                response = await RestClient.ExecuteAsync(request).ConfigureAwait(false);
             }
             response.ResponseStatus.Should().Be(ResponseStatus.Completed,
                 $"Failed to complete API request: {response.ErrorMessage}.");

@@ -13,13 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-const test_configuration_1 = __importDefault(require("../../utils/test-configuration"));
 const wait_1 = __importDefault(require("../../utils/wait"));
 class ApiBase {
-    constructor() {
+    constructor(apiBaseUrl, apiTimeout) {
         const axiosConfig = {
-            baseURL: test_configuration_1.default.getApiBaseUrl(),
-            timeout: test_configuration_1.default.getApiTimeout(),
+            baseURL: apiBaseUrl,
+            timeout: apiTimeout,
         };
         this.axiosClient = axios_1.default.create(axiosConfig);
     }

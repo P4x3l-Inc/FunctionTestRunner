@@ -1,36 +1,45 @@
 ﻿using FunctionTestRunner.Exceptions;
-using System.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace FunctionTestRunner.Utils;
 
-public static class TestConfiguration
+public abstract class TestConfiguration : ITestConfiguration
 {
-    public static string GetEnvironment()
+    private readonly IConfigurationRoot config;
+
+    public TestConfiguration()
+    {
+        config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.test.json")
+                .Build();
+    }
+
+    public string GetEnvironment()
     {
         return GetAppSetting("environmentToTest");
     }
 
-    public static string GetApiKey()
+    public string GetApiKey()
     {
         return GetAppSetting("apiKey");
     }
 
-    public static string GetApiBaseUrl()
+    public string GetApiBaseUrl()
     {
         return GetAppSetting("apiBaseUrl");
     }
 
     // Add more internalAPi info
 
-    public static string GetInternalClientBaseUrl()
+    public string GetInternalClientBaseUrl()
     {
         return GetAppSetting("internalApiBaseUrl");
     }
 
-    private static string GetAppSetting(string appSetting)
+    private string GetAppSetting(string appSetting)
     {
-        
-        var value = ConfigurationManager.AppSettings[appSetting];
+
+        var value = config[appSetting];
 
         if (value == null)
         {

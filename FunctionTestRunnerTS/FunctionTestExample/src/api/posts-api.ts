@@ -1,8 +1,13 @@
 import ApiBase from 'functiontestrunner/dist/wrappers/api/api-base';
+import Settings from '../config/settings';
 import { Post } from '../models/post';
 
 export default class PostsApi extends ApiBase {
-    ignoreApiStatusCodes: boolean = false;;
+    ignoreApiStatusCodes: boolean = false;
+    constructor() {
+        var settings = new Settings();
+        super(settings.getApiBaseUrl(), settings.getApiTimeout())
+    }
 
     public async createPost(post: Post): Promise<Post> {
         const response = await this.postWithBody<Post>('posts', post);

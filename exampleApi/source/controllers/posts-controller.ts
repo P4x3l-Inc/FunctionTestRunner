@@ -6,9 +6,7 @@ const service = PostService.getInstance();
 
 const getPosts = (req: Request, res: Response, next: NextFunction) => {
     const posts = service.getAll();
-    return res.status(200).json({
-        data: posts
-    });
+    return res.status(200).json(posts);
 };
 
 const getPost = (req: Request, res: Response, next: NextFunction) => {
@@ -22,9 +20,7 @@ const getPost = (req: Request, res: Response, next: NextFunction) => {
         });
     }
 
-    return res.status(200).json({
-        data: post
-    });
+    return res.status(200).json(post);
 };
 
 const updatePost = (req: Request, res: Response, next: NextFunction) => {
@@ -39,9 +35,7 @@ const updatePost = (req: Request, res: Response, next: NextFunction) => {
         });
     }
     
-    return res.status(200).json({
-        data: post,
-    });
+    return res.status(200).json(post);
 };
 
 const deletePost = (req: Request, res: Response, next: NextFunction) => {
@@ -59,9 +53,7 @@ const addPost = (req: Request, res: Response, next: NextFunction) => {
 
     const post = service.create(body);
     // return response
-    return res.status(201).json({
-        data: post
-    });
+    return res.status(201).json(post);
 };
 
 export default { getPosts, getPost, updatePost, deletePost, addPost };

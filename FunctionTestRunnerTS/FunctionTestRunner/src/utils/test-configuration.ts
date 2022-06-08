@@ -1,27 +1,27 @@
 import config from 'config';
 
-export default class TestConfiguration {
-  static getEnvironment(): string {
+export class TestConfiguration {
+  getEnvironment(): string {
     return this.getSetting('testSetup.environment');
   }
 
-  static getApiKey(): string {
+  getApiKey(): string {
     return this.getSetting('apiKey');
   }
 
-  static getApiBaseUrl(): string {
+  getApiBaseUrl(): string {
     return this.getSetting('apiBaseUrl');
   }
 
-  static getApiTimeout(): number {
+  getApiTimeout(): number {
     return this.getNumberSetting('apiTimeout');
   }
 
-  static getInternalClientBaseUrl(): string {
+  getInternalClientBaseUrl(): string {
     return this.getSetting('internalApiBaseUrl');
   }
 
-  private static getSetting(settingKey: string): string {
+  getSetting(settingKey: string): string {
     if (!config.has(settingKey)) {
       throw new Error(`AppSetting ${settingKey} not defined`);
     }
@@ -31,7 +31,7 @@ export default class TestConfiguration {
     return value;
   }
 
-  private static getNumberSetting(settingKey: string): number {
+  getNumberSetting(settingKey: string): number {
     const value = this.getSetting(settingKey);
 
     return Number.parseInt(value, 10);

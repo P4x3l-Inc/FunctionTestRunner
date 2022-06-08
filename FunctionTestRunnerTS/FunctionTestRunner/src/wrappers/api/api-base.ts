@@ -1,15 +1,14 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import TestConfiguration from '../../utils/test-configuration';
 import Wait from '../../utils/wait';
 
 export default abstract class ApiBase {
   abstract ignoreApiStatusCodes: boolean;
   axiosClient: AxiosInstance;
 
-  constructor() {
+  constructor(apiBaseUrl: string, apiTimeout: number) {
     const axiosConfig = {
-      baseURL: TestConfiguration.getApiBaseUrl(),
-      timeout: TestConfiguration.getApiTimeout(),
+      baseURL: apiBaseUrl,
+      timeout: apiTimeout,
     };
 
     this.axiosClient = axios.create(axiosConfig);
