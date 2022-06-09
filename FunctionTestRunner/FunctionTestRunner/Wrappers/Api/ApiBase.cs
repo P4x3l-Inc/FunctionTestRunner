@@ -10,6 +10,13 @@ public abstract class ApiBase : RestBase
 
     private static readonly object _syncRoot = new Object();
 
+    protected void AddDefaultHeaders(Dictionary<string, string> headers)
+    {
+        _restClient.AddDefaultHeaders(headers);
+    }
+
+    protected Dictionary<string, string>? DefaultHeaders { get; set; }
+
     protected override RestClient RestClient
     {
         get
@@ -21,12 +28,12 @@ public abstract class ApiBase : RestBase
                     if (_restClient == null)
                     {
                         var apiBaseUrl = Config.GetApiBaseUrl();
-                        var apiKey = Config.GetApiKey();
 
                         _restClient = new RestClient(apiBaseUrl);
-                        if (apiKey != null)
+
+                        if (DefaultHeaders != null && DefaultHeaders.Count > 0)
                         {
-                            _restClient.AddDefaultHeader("apikey", apiKey);
+                            _restClient.AddDefaultHeaders(DefaultHeaders);
                         }
 
                         _restClient.UseNewtonsoftJson();

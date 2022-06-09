@@ -18,6 +18,11 @@ public class PostsApi : ApiBase
     {
         basePath = "posts";
         settings = new Settings();
+
+        DefaultHeaders = new Dictionary<string, string>
+        {
+            { "apikey", settings.GetApiKey() }
+        };
     }
 
     public async Task<Post> Create(Post post)
@@ -27,14 +32,14 @@ public class PostsApi : ApiBase
         return response;
     }
 
-    public async Task<Post> Get(string id)
+    public async Task<Post?> Get(string id)
     {
         var response = await Get<Post>($"{basePath}/{id}").ConfigureAwait(false);
 
         return response;
     }
 
-    public async Task<Post> GetWithHttpStatus(string id, HttpStatusCode httpStatus)
+    public async Task<Post?> GetWithHttpStatus(string id, HttpStatusCode httpStatus)
     {
         var response = await Get<Post>($"{basePath}/{id}", httpStatus).ConfigureAwait(false);
 
@@ -50,6 +55,6 @@ public class PostsApi : ApiBase
 
     public async Task Delete(string id)
     {
-        await Delete($"{basePath}/{id}").ConfigureAwait(false);
+        await Delete<Post>($"{basePath}/{id}").ConfigureAwait(false);
     }
 }

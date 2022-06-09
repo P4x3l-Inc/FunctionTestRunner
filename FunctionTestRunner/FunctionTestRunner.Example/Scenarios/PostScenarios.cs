@@ -24,7 +24,7 @@ public class PostScenarios : IScenarios
         var posts = new List<Post>();
         var api = new PostsApi();
 
-        for (var i = 0; i < numberOfContacts; i++)
+        for (var i = 0; i < numberOfPosts; i++)
         {
             var post = new Post($"title_{Guid.NewGuid()}", $"body_{Guid.NewGuid()}");
 

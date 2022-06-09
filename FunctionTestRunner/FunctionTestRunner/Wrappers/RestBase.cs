@@ -16,12 +16,15 @@ public abstract class RestBase
     /// </summary>
     public static bool IgnoreApiStatusCodes { get; set; }
 
-    protected async Task<T> Get<T>(string path, HttpStatusCode httpStatus = HttpStatusCode.OK)
+    protected async Task<T?> Get<T>(string path, HttpStatusCode httpStatus = HttpStatusCode.OK)
     {
         var request = new RestRequest(path, Method.Get);
 
         var response = await Execute(request, httpStatus).ConfigureAwait(false);
-        var result = DeserializeResponse<T>(response);
+        T? result = default;
+        if (response.IsSuccessful)
+            result = DeserializeResponse<T>(response);
+
         return result;
     }
 
@@ -78,7 +81,7 @@ public abstract class RestBase
         return result;
     }
 
-    protected async Task Delete(string path, HttpStatusCode expectedResponse = HttpStatusCode.OK)
+    protected async Task Delete<T>(string path, HttpStatusCode expectedResponse = HttpStatusCode.OK)
     {
         var request = new RestRequest(path, Method.Delete);
 

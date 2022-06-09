@@ -2,8 +2,28 @@ import http from 'http';
 import express, { Express } from 'express';
 import morgan from 'morgan';
 import routes from './routes/controller-routes';
+const apiKeyAuth = require('api-key-auth');
 
 const router: Express = express();
+
+const apiKeys = new Map();
+apiKeys.set('047ede7a-875f-48fd-9e39-4e5ff6d80338', {
+  id: 1,
+  name: 'function-test'
+});
+
+function getSecret(keyId: string, done: any) {
+    if (!apiKeys.has(keyId)) {
+        return done(new Error('Unknown api key'));
+    }
+    const clientApp = apiKeys.get(keyId);
+    done(null, clientApp.secret, {
+        id: clientApp.id,
+        name: clientApp.name
+    });
+}
+
+//router.use(apiKeyAuth({ getSecret }));
 
 /** Logging */
 router.use(morgan('dev'));
@@ -35,6 +55,17 @@ router.use((req, res, next) => {
     return res.status(404).json({
         message: error.message
     });
+});
+
+// Auth by api-key
+router.use((req, res, next) => {
+    const providedApiKey = req.header('apikey');
+    if (!apiKeys.has(providedApiKey)) {
+        return res.status(401).json({
+            message: 'Unauthorized'
+        });
+    }
+    next();
 });
 
 /** Server */

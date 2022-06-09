@@ -16,5 +16,4 @@ public class SendPostApi : ApiBase
         basePath = "send";
         settings = new Settings();
     }
-{
 }
