@@ -5,7 +5,7 @@ namespace FunctionTestRunner.Utils;
 
 public abstract class TestConfiguration : ITestConfiguration
 {
-    private readonly IConfigurationRoot config;
+    protected readonly IConfigurationRoot config;
 
     public TestConfiguration()
     {
@@ -29,14 +29,29 @@ public abstract class TestConfiguration : ITestConfiguration
         return GetAppSetting("apiBaseUrl");
     }
 
+    public string GetUsername()
+    {
+        return GetAppSetting("username");
+    }
+
+    public string GetPassword()
+    {
+        return GetAppSetting("password");
+    }
+
     // Add more internalAPi info
 
-    public string GetInternalClientBaseUrl()
+    public string GetInternalApiBaseUrl()
     {
         return GetAppSetting("internalApiBaseUrl");
     }
 
-    private string GetAppSetting(string appSetting)
+    public string GetLoginInternalApiUrl()
+    {
+        return GetAppSetting("loginInternalApiUrl");
+    }
+
+    protected string GetAppSetting(string appSetting)
     {
 
         var value = config[appSetting];

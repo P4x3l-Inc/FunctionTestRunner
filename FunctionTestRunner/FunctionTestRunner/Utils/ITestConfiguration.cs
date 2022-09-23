@@ -5,6 +5,9 @@
         string GetApiBaseUrl();
         string GetApiKey();
         string GetEnvironment();
-        string GetInternalClientBaseUrl();
+        string GetInternalApiBaseUrl();
+        string GetUsername();
+        string GetPassword();
+        string GetLoginInternalApiUrl();
     }
 }

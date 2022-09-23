@@ -34,14 +34,14 @@ public class PostsApi : ApiBase
 
     public async Task<Post?> Get(string id)
     {
-        var response = await Get<Post>($"{basePath}/{id}").ConfigureAwait(false);
+        var response = await Get<Post>($"{basePath}/{id}", null).ConfigureAwait(false);
 
         return response;
     }
 
     public async Task<Post?> GetWithHttpStatus(string id, HttpStatusCode httpStatus)
     {
-        var response = await Get<Post>($"{basePath}/{id}", httpStatus).ConfigureAwait(false);
+        var response = await Get<Post>($"{basePath}/{id}", null, httpStatus).ConfigureAwait(false);
 
         return response;
     }

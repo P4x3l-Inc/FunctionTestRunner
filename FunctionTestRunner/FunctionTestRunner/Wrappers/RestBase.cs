@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+using FunctionTestRunner.Models;
 using FunctionTestRunner.Utils;
 using Newtonsoft.Json;
 using RestSharp;
+using System.IO;
 using System.Net;
 
 namespace FunctionTestRunner.Wrappers;
@@ -16,9 +18,14 @@ public abstract class RestBase
     /// </summary>
     public static bool IgnoreApiStatusCodes { get; set; }
 
-    protected async Task<T?> Get<T>(string path, HttpStatusCode httpStatus = HttpStatusCode.OK)
+    protected async Task<T?> Get<T>(string path, CookieCollection? cookies, HttpStatusCode httpStatus = HttpStatusCode.OK)
     {
         var request = new RestRequest(path, Method.Get);
+
+        if (cookies != null)
+        {
+            request.AddHeader("Cookie", cookies.ToString());
+        }
 
         var response = await Execute(request, httpStatus).ConfigureAwait(false);
         T? result = default;
@@ -26,6 +33,81 @@ public abstract class RestBase
             result = DeserializeResponse<T>(response);
 
         return result;
+    }
+
+    protected async Task<T?> GetWithHeaders<T>(string path, Dictionary<string, string> header, HttpStatusCode httpStatus = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Get);
+
+        foreach (var item in header)
+        {
+            request.AddHeader(item.Key, item.Value);
+        }
+
+        var response = await Execute(request, httpStatus).ConfigureAwait(false);
+        T? result = default;
+        if (response.IsSuccessful)
+            result = DeserializeResponse<T>(response);
+
+        return result;
+    }
+
+    protected async Task<RestResponse> Post(string path, HttpStatusCode expectedResponse = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Post);
+        request.RequestFormat = DataFormat.Json;
+
+        var response = await Execute(request, expectedResponse).ConfigureAwait(false);
+
+        return response;
+    }
+
+    protected async Task<RestResponse> PostWithHeader(string path, Dictionary<string, string> header, HttpStatusCode expectedResponse = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Post);
+        request.RequestFormat = DataFormat.Json;
+
+        foreach (var item in header)
+        {
+            request.AddHeader(item.Key, item.Value);
+        }
+
+        var response = await Execute(request, expectedResponse).ConfigureAwait(false);
+
+        return response;
+    }
+
+    protected async Task<RestResponse> PostWithBody(string path, object? body = null, ApiFile? file = null, HttpStatusCode expectedResponse = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Post);
+        request.RequestFormat = DataFormat.Json;
+        request.AddJsonBody(body ?? string.Empty);
+
+        if (file != null)
+        {
+            request.AddFile(file.FieldName, file.Content, file.FileName, file.ContentType);
+        }
+
+        var response = await Execute(request, expectedResponse).ConfigureAwait(false);
+
+        return response;
+    }
+
+    protected async Task<RestResponse> PostWithHeaderAndBody(string path, Dictionary<string, string> header, object body, HttpStatusCode expectedResponse = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Post);
+        request.RequestFormat = DataFormat.Json;
+
+        foreach (var item in header)
+        {
+            request.AddHeader(item.Key, item.Value);
+        }
+
+        request.AddJsonBody(body);
+
+        var response = await Execute(request, expectedResponse).ConfigureAwait(false);
+
+        return response;
     }
 
     protected async Task<T> Post<T>(string path, HttpStatusCode expectedResponse = HttpStatusCode.OK)
@@ -50,6 +132,22 @@ public abstract class RestBase
         }
 
         request.AddJsonBody(body);
+
+        var response = await Execute(request, expectedResponse).ConfigureAwait(false);
+
+        var result = DeserializeResponse<T>(response);
+        return result;
+    }
+
+    protected async Task<T> PostWithHeader<T>(string path, Dictionary<string, string> header, HttpStatusCode expectedResponse = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Post);
+        request.RequestFormat = DataFormat.Json;
+
+        foreach (var item in header)
+        {
+            request.AddHeader(item.Key, item.Value);
+        }
 
         var response = await Execute(request, expectedResponse).ConfigureAwait(false);
 
@@ -445,6 +543,8 @@ public abstract class RestBase
 
     private async Task<RestResponse> Execute(RestRequest request, HttpStatusCode expectedResponse = HttpStatusCode.OK)
     {
+        request.AddCookie()
+        request.AddHeader("Cookie", String.Join(";", this.RestClient.CookieContainer));
         var response = await RestClient.ExecuteAsync(request).ConfigureAwait(false);
         if (!IgnoreApiStatusCodes)
         {
