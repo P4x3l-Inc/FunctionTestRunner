@@ -8,10 +8,11 @@
     <FileVersion>1.0.0.0</FileVersion>
     <Authors>David Bandemo</Authors>
     <Description>Helper for creating function tests</Description>
-    <Version>0.1.11</Version>
+    <Version>0.1.12</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	  <IsPackable>true</IsPackable>
 	  <IncludeSymbols>True</IncludeSymbols>
+	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>

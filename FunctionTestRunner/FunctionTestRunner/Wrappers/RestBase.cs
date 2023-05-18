@@ -14,13 +14,6 @@ public abstract class RestBase
     protected abstract RestClient RestClient { get; }
     protected abstract ITestConfiguration Config { get; }
 
-    private readonly ITestOutputHelper _output;
-
-    protected RestBase(ITestOutputHelper output)
-    {
-        _output = output;
-    }
-
     /// <summary>
     /// Dont fail test, even if api-call fails.
     /// </summary>
@@ -571,7 +564,7 @@ public abstract class RestBase
         {
             if (response.ResponseStatus == ResponseStatus.Error)
             {
-                _output.WriteLine("Received reponse status error, making one more attempt...");
+                //_output.WriteLine("Received reponse status error, making one more attempt...");
                 Wait.ForSeconds(15);
                 response = await RestClient.ExecuteAsync(request).ConfigureAwait(false);
             }
