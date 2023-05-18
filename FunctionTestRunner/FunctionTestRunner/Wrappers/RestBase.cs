@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System.IO;
 using System.Net;
+using Xunit.Abstractions;
 
 namespace FunctionTestRunner.Wrappers;
 
@@ -13,12 +14,19 @@ public abstract class RestBase
     protected abstract RestClient RestClient { get; }
     protected abstract ITestConfiguration Config { get; }
 
+    private readonly ITestOutputHelper _output;
+
+    protected RestBase(ITestOutputHelper output)
+    {
+        _output = output;
+    }
+
     /// <summary>
     /// Dont fail test, even if api-call fails.
     /// </summary>
     public static bool IgnoreApiStatusCodes { get; set; }
 
-    protected async Task<T?> Get<T>(string path, CookieCollection? cookies, HttpStatusCode httpStatus = HttpStatusCode.OK)
+    protected async Task<T?> Get<T>(string path, CookieCollection? cookies = null, HttpStatusCode httpStatus = HttpStatusCode.OK)
     {
         var request = new RestRequest(path, Method.Get);
 
@@ -32,6 +40,20 @@ public abstract class RestBase
         if (response.IsSuccessful)
             result = DeserializeResponse<T>(response);
 
+        return result;
+    }
+
+    protected async Task<T> GetWithQueryParams<T>(string path, Dictionary<string, string> args, HttpStatusCode expectedResponse = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Get);
+        foreach (var a in args)
+        {
+            request.AddQueryParameter(a.Key, a.Value);
+        }
+
+        var response = await Execute(request, expectedResponse);
+
+        var result = DeserializeResponse<T>(response);
         return result;
     }
 
@@ -172,7 +194,7 @@ public abstract class RestBase
         var request = new RestRequest(path, Method.Put);
         request.RequestFormat = DataFormat.Json;
 
-        request.AddJsonBody(body);
+        request.AddJsonBody(body.ToString());
 
         var response = await Execute(request).ConfigureAwait(false);
         var result = DeserializeResponse<T>(response);
@@ -543,17 +565,13 @@ public abstract class RestBase
 
     private async Task<RestResponse> Execute(RestRequest request, HttpStatusCode expectedResponse = HttpStatusCode.OK)
     {
-        request.AddCookie()
         request.AddHeader("Cookie", String.Join(";", this.RestClient.CookieContainer));
         var response = await RestClient.ExecuteAsync(request).ConfigureAwait(false);
         if (!IgnoreApiStatusCodes)
         {
             if (response.ResponseStatus == ResponseStatus.Error)
             {
-                // A common error is:
-                // "The underlying connection was closed: A connection that was expected to be kept alive was closed by the server.."
-                // so lets wait a few seconds and try again
-                // TestContext.WriteLine("Received reponse status error, making one more attempt...");
+                _output.WriteLine("Received reponse status error, making one more attempt...");
                 Wait.ForSeconds(15);
                 response = await RestClient.ExecuteAsync(request).ConfigureAwait(false);
             }
