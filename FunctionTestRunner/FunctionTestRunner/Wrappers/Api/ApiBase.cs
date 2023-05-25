@@ -1,6 +1,7 @@
 ﻿using FunctionTestRunner.Utils;
 using RestSharp;
 using RestSharp.Serializers.NewtonsoftJson;
+using Xunit.Abstractions;
 
 namespace FunctionTestRunner.Wrappers.Api;
 

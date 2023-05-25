@@ -1,5 +1,6 @@
 ﻿using RestSharp;
 using System.Net;
+using Xunit.Abstractions;
 
 namespace FunctionTestRunner.Wrappers.Api
 {

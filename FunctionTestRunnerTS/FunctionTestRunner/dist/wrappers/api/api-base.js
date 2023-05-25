@@ -32,6 +32,17 @@ class ApiBase {
             return data;
         });
     }
+    getWithQueryParams(path, params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const request = {
+                method: HttpMethod.Get,
+                url: path,
+                params: params,
+            };
+            const data = yield this.execute(request, 200);
+            return data;
+        });
+    }
     delete(path) {
         return __awaiter(this, void 0, void 0, function* () {
             const request = {

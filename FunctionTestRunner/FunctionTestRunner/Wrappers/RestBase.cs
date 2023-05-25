@@ -6,11 +6,13 @@ using RestSharp;
 using System.IO;
 using System.Net;
 using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace FunctionTestRunner.Wrappers;
 
 public abstract class RestBase
 {
+    protected ITestOutputHelper? TestOutputHelper { get; set; }
     protected abstract RestClient RestClient { get; }
     protected abstract ITestConfiguration Config { get; }
 
@@ -175,6 +177,11 @@ public abstract class RestBase
         var request = new RestRequest(path, Method.Post);
         request.RequestFormat = DataFormat.Json;
         request.AddJsonBody(body ?? string.Empty);
+
+        if (TestOutputHelper != null)
+        {
+            TestOutputHelper.WriteLine("test test");
+        }
 
         var response = await Execute(request, expectedResponse).ConfigureAwait(false);
 
@@ -564,10 +571,20 @@ public abstract class RestBase
         {
             if (response.ResponseStatus == ResponseStatus.Error)
             {
-                //_output.WriteLine("Received reponse status error, making one more attempt...");
+                if (TestOutputHelper != null)
+                {
+                    TestOutputHelper.WriteLine("Received reponse status error, making one more attempt...");
+                }
                 Wait.ForSeconds(15);
                 response = await RestClient.ExecuteAsync(request).ConfigureAwait(false);
             }
+
+
+            if (TestOutputHelper != null)
+            {
+                TestOutputHelper.WriteLine(JsonConvert.SerializeObject(response));
+            }
+
             response.ResponseStatus.Should().Be(ResponseStatus.Completed,
                 $"Failed to complete API request: {response.ErrorMessage}.");
             response.StatusCode.Should().Be(expectedResponse,

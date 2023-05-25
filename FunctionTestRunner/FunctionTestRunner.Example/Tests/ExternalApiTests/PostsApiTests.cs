@@ -3,6 +3,8 @@ using FunctionTestRunner.Example.Api;
 using FunctionTestRunner.Example.Models;
 using FunctionTestRunner.Utils;
 using System.Net;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace FunctionTestRunner.Example.Tests.ExternalApiTests;
 
@@ -10,9 +12,21 @@ public class PostsApiTests
 {
     private readonly PostsApi _api;
 
-    public PostsApiTests()
+    public PostsApiTests(ITestOutputHelper testOutputHelper)
     {
-        _api = new PostsApi();
+        _api = new PostsApi(testOutputHelper);
+    }
+
+    [Fact]
+    public async Task Tests()
+    {
+        await TestRunner.RunAsync(async bag =>
+        {
+            var result = await _api.Test();
+
+            result.Should().NotBeNull();
+
+        }).ConfigureAwait(false);
     }
 
     [Fact]

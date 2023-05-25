@@ -25,6 +25,18 @@ export default abstract class ApiBase {
     return data;
   }
 
+  async getWithQueryParams<T>(path: string, params : { [id: string]: string; }): Promise<T> {
+    const request: AxiosRequestConfig = {
+      method: HttpMethod.Get,
+      url: path,
+      params: params,
+    };
+
+    const data = await this.execute<T>(request, 200);
+
+    return data;
+  }
+
   async delete<T>(path: string): Promise<void> {
     const request: AxiosRequestConfig = {
       method: HttpMethod.Delete,

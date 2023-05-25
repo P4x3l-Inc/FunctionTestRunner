@@ -4,6 +4,9 @@ export default abstract class ApiBase {
     axiosClient: AxiosInstance;
     constructor(apiBaseUrl: string, apiTimeout: number);
     get<T>(path: string): Promise<T>;
+    getWithQueryParams<T>(path: string, params: {
+        [id: string]: string;
+    }): Promise<T>;
     delete<T>(path: string): Promise<void>;
     postWithBody<T>(path: string, body: unknown, expectedResponse?: number): Promise<T>;
     putWithBody<T>(path: string, body: unknown, expectedResponse?: number): Promise<T>;
