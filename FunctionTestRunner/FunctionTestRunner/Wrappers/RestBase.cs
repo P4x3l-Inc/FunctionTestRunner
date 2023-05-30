@@ -38,7 +38,7 @@ public abstract class RestBase
         return result;
     }
 
-    protected async Task<T> GetWithQueryParams<T>(string path, Dictionary<string, string> args, HttpStatusCode expectedResponse = HttpStatusCode.OK)
+    protected async Task<T?> GetWithQueryParams<T>(string path, Dictionary<string, string> args, HttpStatusCode expectedResponse = HttpStatusCode.OK)
     {
         var request = new RestRequest(path, Method.Get);
         foreach (var a in args)
@@ -48,7 +48,10 @@ public abstract class RestBase
 
         var response = await Execute(request, expectedResponse);
 
-        var result = DeserializeResponse<T>(response);
+        T? result = default;
+        if (response.IsSuccessful)
+            result = DeserializeResponse<T>(response);
+
         return result;
     }
 
@@ -59,6 +62,28 @@ public abstract class RestBase
         foreach (var item in header)
         {
             request.AddHeader(item.Key, item.Value);
+        }
+
+        var response = await Execute(request, httpStatus).ConfigureAwait(false);
+        T? result = default;
+        if (response.IsSuccessful)
+            result = DeserializeResponse<T>(response);
+
+        return result;
+    }
+
+    protected async Task<T?> GetWithHeadersAndQueryParams<T>(string path, Dictionary<string, string> header, Dictionary<string, string> args, HttpStatusCode httpStatus = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Get);
+
+        foreach (var item in header)
+        {
+            request.AddHeader(item.Key, item.Value);
+        }
+
+        foreach (var a in args)
+        {
+            request.AddQueryParameter(a.Key, a.Value);
         }
 
         var response = await Execute(request, httpStatus).ConfigureAwait(false);
