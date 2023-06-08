@@ -7,10 +7,14 @@ public abstract class TestConfiguration : ITestConfiguration
 {
     protected readonly IConfigurationRoot config;
 
-    public TestConfiguration()
+    protected TestConfiguration()
     {
+        var env = environmentParam != null ?
+            environmentParam :
+            "test";
+
         config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.test.json")
+                .AddJsonFile($"appsettings.{env}.json")
                 .Build();
     }
 
@@ -63,4 +67,6 @@ public abstract class TestConfiguration : ITestConfiguration
 
         return value;
     }
+
+    protected string? environmentParam = null;
 }

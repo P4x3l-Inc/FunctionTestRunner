@@ -47,11 +47,11 @@ public class ScenarioPropertyBag
         return missingKeys.Count == 0;
     }
 
-    public T Get<T>(string key)
+    public T? Get<T>(string key)
     {
         if (!_bag.ContainsKey(key) || !_bag[key].Item1)
         {
-            return default(T);
+            return default;
         }
 
         return JsonConvert.DeserializeObject<T>(_bag[key].Item2);
@@ -76,10 +76,5 @@ public class ScenarioPropertyBag
         {
             _bag.Remove(key);
         }
-    }
-
-    internal object Get<T>(object labelId)
-    {
-        throw new NotImplementedException();
     }
 }

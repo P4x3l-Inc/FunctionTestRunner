@@ -44,7 +44,7 @@ namespace FunctionTestRunner.Utils
                 throw new TimeoutException();
             }
 
-            Debug.WriteLine($"Try.Until ran for {timer.ElapsedMilliseconds}ms, timeout set to: {timeoutInSeconds}s");
+            output.WriteLine($"Try.Until ran for {timer.ElapsedMilliseconds}ms, timeout set to: {timeoutInSeconds}s");
         }
     }
 }

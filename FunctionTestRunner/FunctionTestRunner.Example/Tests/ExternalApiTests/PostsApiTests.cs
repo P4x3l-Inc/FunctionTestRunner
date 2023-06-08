@@ -1,38 +1,27 @@
 ﻿using FluentAssertions;
 using FunctionTestRunner.Example.Api;
 using FunctionTestRunner.Example.Models;
-using FunctionTestRunner.Utils;
+using FunctionTestRunner.Example.Utils;
 using System.Net;
 using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace FunctionTestRunner.Example.Tests.ExternalApiTests;
 
 public class PostsApiTests
 {
+    private readonly ITestOutputHelper _testOutputHelper;
     private readonly PostsApi _api;
 
     public PostsApiTests(ITestOutputHelper testOutputHelper)
     {
+        _testOutputHelper = testOutputHelper;
         _api = new PostsApi(testOutputHelper);
-    }
-
-    [Fact]
-    public async Task Tests()
-    {
-        await TestRunner.RunAsync(async bag =>
-        {
-            var result = await _api.Test();
-
-            result.Should().NotBeNull();
-
-        }).ConfigureAwait(false);
     }
 
     [Fact]
     public async Task PostsApi_ShouldHandleCrudOperations()
     {
-        await TestRunner.RunAsync(async bag =>
+        await new ExampleTestRunner(_testOutputHelper).RunAsync(async bag =>
         {
             var stamp = Guid.NewGuid();
             var postToCreate = new Post($"test title {stamp}", $"test body {stamp}");

@@ -21,7 +21,7 @@ public class SendPosts
     [Fact]
     public async Task SendPosts_ShouldSendPosts()
     {
-        await TestRunner.RunAsync(async bag =>
+        await new TestRunner().RunAsync(async bag =>
         {
 
             // Arrange

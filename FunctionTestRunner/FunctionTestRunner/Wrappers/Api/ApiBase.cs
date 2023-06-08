@@ -1,7 +1,5 @@
-﻿using FunctionTestRunner.Utils;
-using RestSharp;
+﻿using RestSharp;
 using RestSharp.Serializers.NewtonsoftJson;
-using Xunit.Abstractions;
 
 namespace FunctionTestRunner.Wrappers.Api;
 
@@ -9,7 +7,7 @@ public abstract class ApiBase : RestBase
 {
     private RestClient _restClient;
 
-    private static readonly object _syncRoot = new Object();
+    private static readonly object _syncRoot = new object();
 
     protected void AddDefaultHeaders(Dictionary<string, string> headers)
     {
