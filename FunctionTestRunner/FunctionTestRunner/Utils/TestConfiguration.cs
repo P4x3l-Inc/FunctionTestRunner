@@ -7,9 +7,9 @@ public abstract class TestConfiguration : ITestConfiguration
 {
     protected readonly IConfigurationRoot config;
 
-    protected TestConfiguration()
+    protected TestConfiguration(string? environmentParam = null)
     {
-        var env = environmentParam != null ?
+        var env = !string.IsNullOrEmpty(environmentParam) ?
             environmentParam :
             "test";
 
@@ -67,6 +67,4 @@ public abstract class TestConfiguration : ITestConfiguration
 
         return value;
     }
-
-    protected string? environmentParam = null;
 }

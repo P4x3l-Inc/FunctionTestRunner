@@ -3,16 +3,15 @@ using FunctionTestRunner.Models;
 using FunctionTestRunner.Utils;
 using Newtonsoft.Json;
 using RestSharp;
-using System.IO;
 using System.Net;
 using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace FunctionTestRunner.Wrappers;
 
 public abstract class RestBase
 {
     protected ITestOutputHelper? TestOutputHelper { get; set; }
+    protected string? BasePath { get; set; }
     protected abstract RestClient RestClient { get; }
     protected abstract ITestConfiguration Config { get; }
 

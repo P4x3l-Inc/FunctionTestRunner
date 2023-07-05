@@ -26,7 +26,7 @@ public abstract class ApiBase : RestBase
                 {
                     if (_restClient == null)
                     {
-                        var apiBaseUrl = new Uri(Config.GetApiBaseUrl(), UriKind.Absolute);
+                        var apiBaseUrl = new Uri(string.IsNullOrEmpty(BasePath) ? Config.GetApiBaseUrl() : BasePath, UriKind.Absolute);
 
                         _restClient = new RestClient(apiBaseUrl);
 
