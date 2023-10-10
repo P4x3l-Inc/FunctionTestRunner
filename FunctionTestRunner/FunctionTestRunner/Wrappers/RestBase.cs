@@ -11,6 +11,7 @@ namespace FunctionTestRunner.Wrappers;
 public abstract class RestBase
 {
     protected ITestOutputHelper? TestOutputHelper { get; set; }
+    protected CookieCollection? RequestCookieCollection { get; set; }
     protected string? BasePath { get; set; }
     protected abstract RestClient RestClient { get; }
     protected abstract ITestConfiguration Config { get; }
@@ -20,14 +21,64 @@ public abstract class RestBase
     /// </summary>
     public static bool IgnoreApiStatusCodes { get; set; }
 
-    protected async Task<T?> Get<T>(string path, CookieCollection? cookies = null, HttpStatusCode httpStatus = HttpStatusCode.OK)
+    protected async Task<RestResponse> Get(string path, HttpStatusCode httpStatus = HttpStatusCode.OK)
     {
         var request = new RestRequest(path, Method.Get);
 
-        if (cookies != null)
+        var response = await Execute(request, httpStatus).ConfigureAwait(false);
+        
+        return response;
+    }
+
+    protected async Task<RestResponse> GetWithQueryParams(string path, Dictionary<string, string> args, HttpStatusCode expectedResponse = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Get);
+        foreach (var a in args)
         {
-            request.AddHeader("Cookie", cookies.ToString());
+            request.AddQueryParameter(a.Key, a.Value);
         }
+
+        var response = await Execute(request, expectedResponse);
+
+        return response;
+    }
+
+    protected async Task<RestResponse> GetWithHeaders(string path, Dictionary<string, string> header, HttpStatusCode httpStatus = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Get);
+
+        foreach (var item in header)
+        {
+            request.AddHeader(item.Key, item.Value);
+        }
+
+        var response = await Execute(request, httpStatus).ConfigureAwait(false);
+
+        return response;
+    }
+
+    protected async Task<RestResponse> GetWithHeadersAndQueryParams(string path, Dictionary<string, string> header, Dictionary<string, string> args, HttpStatusCode httpStatus = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Get);
+
+        foreach (var item in header)
+        {
+            request.AddHeader(item.Key, item.Value);
+        }
+
+        foreach (var a in args)
+        {
+            request.AddQueryParameter(a.Key, a.Value);
+        }
+
+        var response = await Execute(request, httpStatus).ConfigureAwait(false);
+
+        return response;
+    }
+
+    protected async Task<T?> Get<T>(string path, HttpStatusCode httpStatus = HttpStatusCode.OK)
+    {
+        var request = new RestRequest(path, Method.Get);
 
         var response = await Execute(request, httpStatus).ConfigureAwait(false);
         T? result = default;
@@ -196,7 +247,7 @@ public abstract class RestBase
         return result;
     }
 
-    protected async Task<T> PostWithBody<T>(string path, object body = null, HttpStatusCode expectedResponse = HttpStatusCode.OK)
+    protected async Task<T> PostWithBody<T>(string path, object? body = null, HttpStatusCode expectedResponse = HttpStatusCode.OK)
     {
         var request = new RestRequest(path, Method.Post);
         request.RequestFormat = DataFormat.Json;
@@ -251,7 +302,7 @@ public abstract class RestBase
 
     private async Task<RestResponse> Execute(RestRequest request, HttpStatusCode expectedResponse = HttpStatusCode.OK)
     {
-        request.AddHeader("Cookie", string.Join(";", RestClient.CookieContainer));
+        //request.AddHeader("Cookie", string.Join(";", RequestCookieCollection != null ? RequestCookieCollection.GetAllCookies() : RestClient.CookieContainer));
         var response = await RestClient.ExecuteAsync(request).ConfigureAwait(false);
         if (!IgnoreApiStatusCodes)
         {
